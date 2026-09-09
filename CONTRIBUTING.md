@@ -86,7 +86,8 @@ Exported JSON may embed a photo. Use synthetic fixtures in tests and reports.
 - Follow the surrounding code style. Extension stdout is reserved for JSON-RPC;
   use the existing logging facilities, not `console.log`.
 
-The [README](README.md) describes installation, storage, and fabrication limits.
+The [README](README.md) provides a quick start. The [user guide](docs/guide.md)
+covers storage, canvas actions, and fabrication limits.
 Update it when user-facing behavior changes.
 
 ## Pull requests
