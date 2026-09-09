@@ -1,0 +1,25 @@
+instructions: |
+  Read README.md and CONTRIBUTING.md before changing this project.
+  Use Node.js 22 or 24 and npm. Run npm test for code changes.
+  Run npm run build:vendor when changing viewer bundle inputs or dependencies,
+  and include regenerated vendor files and license notices.
+  Keep the installed extension self-contained; do not add runtime CDN loads.
+  The Copilot host resolves @github/copilot-sdk; do not add it as a dependency.
+  Preserve revision-checked transactions, backward-compatible layout imports,
+  loopback-only serving, and token/origin checks.
+  Keep personal designs, photos, logs, credentials, and live panel URLs out of git.
+  Describe exported geometry as experimental, not verified print-ready.
+
+scripts:
+  - name: Install development dependencies
+    command: npm ci
+  - name: Test
+    command: npm test
+  - name: Build local viewer bundle
+    command: npm run build:vendor
+
+auto_open_in_browser: false
+
+automation:
+  auto_issue_session: false
+  remote_control: false

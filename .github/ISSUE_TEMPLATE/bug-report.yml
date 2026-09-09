@@ -1,0 +1,39 @@
+name: Bug report
+description: Something is not working as expected.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report! Please search existing issues first.
+        Do not include private photos, exported personal designs, tokens, or live panel URLs.
+        For vulnerabilities, follow [SECURITY.md](https://github.com/JasonEtco/gridfinity-copilot-extension/blob/main/SECURITY.md) instead.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Start from a new synthetic design, if possible.
+      placeholder: |
+        1. Open a new design with…
+        2. Add a bin…
+        3. Change…
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include the extension commit or install date, Copilot version, OS, and user/project install scope. Include Node version for development failures.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Optional redacted logs or screenshots. For fit problems, include dimensions, OpenSCAD/slicer versions, printer, material, and tolerances. Check that JSON contains no private photo before attaching it.
