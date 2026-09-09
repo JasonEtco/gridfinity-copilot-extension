@@ -1,0 +1,175 @@
+.model-viewer {
+    --gfv-ink: var(--text-color-default, var(--foreground, #273746));
+    --gfv-muted: var(--text-color-muted, var(--muted, #657581));
+    --gfv-line: var(--border-color-default, var(--border, #d4dee5));
+    --gfv-focus: var(--color-focus-outline, #2667b5);
+    --gfv-accent: var(--true-color-blue, #2667b5);
+    --gfv-panel: color-mix(in srgb, var(--background-color-default, #fff) 88%, #0f1c28);
+    --gfv-stage: radial-gradient(circle at 22% 20%, color-mix(in srgb, var(--gfv-accent) 24%, transparent), transparent 34%),
+        linear-gradient(160deg, color-mix(in srgb, var(--background-color-default, #fff) 62%, #0d1722), #101824);
+    min-height: 320px;
+}
+
+.model-viewer .gfv-viewer {
+    display: grid;
+    grid-template-rows: auto auto minmax(240px, 1fr);
+    gap: 12px;
+    min-height: 320px;
+}
+.model-viewer .gfv-viewer--generator {
+    grid-template-rows: auto minmax(240px, 1fr);
+    min-height: 280px;
+}
+
+.model-viewer .gfv-viewer__chrome,
+.model-viewer .gfv-viewer__toolbar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.model-viewer .gfv-viewer__chrome {
+    padding: 3px 0 0 1px;
+}
+
+.model-viewer .gf-v-label {
+    margin: 0 0 4px;
+    color: var(--gfv-muted);
+    font: 10px/1.4 var(--mono, "SFMono-Regular", Consolas, monospace);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+}
+
+.model-viewer .gfv-viewer__help,
+.model-viewer .gfv-viewer__selection {
+    margin: 0;
+    color: var(--gfv-muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.model-viewer .gfv-viewer__selection {
+    padding: 8px 12px;
+    border: 1px solid color-mix(in srgb, var(--gfv-line) 82%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--background-color-default, var(--surface, #fff)) 80%, transparent);
+    color: var(--gfv-ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gfv-accent) 12%, transparent);
+}
+
+.model-viewer .gfv-viewer__toolbar {
+    padding: 10px 12px;
+    border: 1px solid var(--gfv-line);
+    border-radius: 12px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--background-color-default, var(--surface, #fff)) 92%, transparent), color-mix(in srgb, var(--background-color-default, var(--surface, #fff)) 76%, transparent));
+}
+
+.model-viewer .gfv-viewer__group {
+    display: inline-flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.model-viewer .gfv-viewer__group button {
+    min-width: 38px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--gfv-line) 72%, transparent);
+    background: color-mix(in srgb, var(--background-color-default, var(--surface, #fff)) 75%, transparent);
+}
+
+.model-viewer .gfv-viewer__group button[aria-pressed="true"],
+.model-viewer .gfv-viewer__group .gfv-viewer__reset {
+    border-color: color-mix(in srgb, var(--gfv-accent) 45%, var(--gfv-line));
+}
+
+.model-viewer .gfv-viewer__group button[aria-pressed="true"] {
+    background: var(--gfv-accent);
+    color: white;
+}
+
+.model-viewer .gfv-viewer__reset {
+    padding-inline: 12px;
+}
+
+.model-viewer .gfv-viewer__stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    min-height: 240px;
+}
+
+.model-viewer .gfv-viewer__canvas-shell {
+    position: relative;
+    min-height: 240px;
+    height: clamp(240px, 34vh, 340px);
+    border: 1px solid color-mix(in srgb, var(--gfv-line) 86%, transparent);
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--gfv-stage);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gfv-accent) 10%, transparent), inset 0 -44px 100px #09111a80;
+}
+
+.model-viewer .gfv-viewer__canvas-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--gfv-line) 14%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--gfv-line) 14%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+.model-viewer .gfv-viewer__canvas {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    outline: none;
+}
+
+.model-viewer .gfv-viewer__canvas:focus-visible {
+    outline: 2px solid var(--gfv-focus);
+    outline-offset: -3px;
+}
+
+.model-viewer .gfv-viewer__overlay {
+    position: absolute;
+    z-index: 2;
+    inset: auto 14px 14px 14px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--background-color-default, var(--surface, #fff)) 78%, #0a121a);
+    border: 1px solid color-mix(in srgb, var(--gfv-line) 80%, transparent);
+    color: var(--gfv-ink);
+    font-size: 12px;
+    line-height: 1.6;
+    backdrop-filter: blur(12px);
+}
+
+@media (max-width: 780px) {
+    .model-viewer .gfv-viewer__stage {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-color-mode="light"]) .model-viewer {
+        --gfv-panel: color-mix(in srgb, var(--background-color-default, #222d37) 86%, #0b1016);
+        --gfv-stage: radial-gradient(circle at 22% 18%, color-mix(in srgb, var(--gfv-accent) 28%, transparent), transparent 36%),
+            linear-gradient(160deg, #0f1822, #182431 62%, #0c1219);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .model-viewer .gfv-viewer__canvas-shell::before {
+        background-size: 40px 40px;
+    }
+}

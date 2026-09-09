@@ -1,0 +1,18 @@
+* text=auto
+*.js text eol=lf
+*.mjs text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.svg text eol=lf
+*.scad text eol=lf
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+.github/extensions/gridfinity-builder/vendor/** linguist-vendored -whitespace

@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest an improvement to the workbench.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea? Tell us what you want to make. Please search existing issues first
+        and use non-sensitive examples or photos you have permission to share.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the workflow or thing you are trying to organize.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+      description: Explain the proposed behavior and what a successful result looks like.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches or workarounds you have tried.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Optional sketches, dimensional references, or screenshots. Note any compatibility, fabrication, or privacy concerns.
