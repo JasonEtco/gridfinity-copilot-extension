@@ -261,7 +261,7 @@ function renderBoard() {
     button.style.width = `calc(${width / grid.columns * 100}% - 6px)`;
     button.style.height = `calc(${depth / grid.rows * 100}% - 6px)`;
     button.setAttribute("aria-pressed", String(bin.id === selectedId));
-    button.setAttribute("aria-label", `${bin.label || "Unlabeled bin"}, ${width} by ${depth} cells, ${bin.height} U tall, column ${bin.x}, row ${bin.y}. Arrow keys move; R rotates; D duplicates; Delete removes.`);
+    button.setAttribute("aria-label", `${bin.label || "Unlabeled bin"}, ${width} by ${depth} cells, ${bin.height} U tall, column ${bin.x}, row ${bin.y}. Arrow keys move; R rotates; D duplicates; Delete removes. Double-click or right-click starts a similar bin.`);
     button.title = `${bin.label} · ${width} × ${depth} cells · ${bin.height}U`;
     const label = document.createElement("span");
     label.className = "bin-label";
@@ -282,6 +282,14 @@ function renderBoard() {
       button.prepend(svg);
     }
     button.addEventListener("click", () => selectBin(bin.id));
+    button.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      useBinAsNewDraft(bin.id);
+    });
+    button.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      useBinAsNewDraft(bin.id);
+    });
     button.addEventListener("keydown", binKeydown);
     button.addEventListener("pointerdown", beginDrag);
     board.append(button);
@@ -302,6 +310,14 @@ function renderBoard() {
     dimensions.textContent = `${width}×${depth}`;
     item.append(swatch, name, dimensions);
     item.addEventListener("click", () => selectBin(bin.id, true));
+    item.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      useBinAsNewDraft(bin.id);
+    });
+    item.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      useBinAsNewDraft(bin.id);
+    });
     inventory.append(item);
   }
   $("board").replaceChildren(board);
@@ -497,6 +513,20 @@ function duplicateBin() {
   });
 }
 
+function useBinAsNewDraft(id = selectedId) {
+  if (!state) return;
+  if (busy || !connected || designDirty || binDirty) {
+    showError("Wait for current edits to save before starting a similar bin.");
+    return;
+  }
+  const bin = state.design.bins.find((item) => item.id === id);
+  if (!bin) return;
+  selectedId = bin.id;
+  binDirty = false;
+  selectBin(bin.id, true);
+  workflowUI.useBinAsDraft(structuredClone(bin));
+}
+
 function removeBin() {
   const bin = selectedBin();
   if (bin) void edit([{ type: "remove_bin", id: bin.id }]);
@@ -663,6 +693,7 @@ $("reset-design").addEventListener("click", () => void resetLiveFields("design")
 $("reset-bin").addEventListener("click", () => void resetLiveFields("bin"));
 $("rotate-bin").addEventListener("click", () => void rotateBin());
 $("duplicate-bin").addEventListener("click", duplicateBin);
+$("use-bin-template").addEventListener("click", () => useBinAsNewDraft());
 $("remove-bin").addEventListener("click", removeBin);
 $("add-bin").addEventListener("click", () => {
   workflowUI.show("bin");
@@ -784,7 +815,7 @@ async function setView(mode) {
     try {
       const { createViewer } = await import("./viewer.mjs");
       $("model-viewer").hidden = false;
-      viewer = createViewer($("model-viewer"), { onError: showError, onSelect: id => selectBin(id) });
+      viewer = createViewer($("model-viewer"), { onError: showError, onSelect: id => selectBin(id), onOpenDraft: id => useBinAsNewDraft(id) });
       viewer.update(state.design, selectedId);
     } catch (error) {
       $("model-viewer").hidden = true;
@@ -801,7 +832,9 @@ async function setView(mode) {
   $("view-layout").setAttribute("aria-pressed", String(mode === "layout"));
   $("view-3d").setAttribute("aria-pressed", String(mode === "3d"));
   $("preview-label").textContent = mode === "3d" ? "Model / 3D preview" : "Layout / top view";
-  document.querySelector(".keyboard-hint").textContent = mode === "3d" ? "Drag to orbit · Wheel to zoom" : "Drag to snap · Arrow keys to move";
+  document.querySelector(".keyboard-hint").textContent = mode === "3d"
+    ? "Drag to orbit · Wheel to zoom · Double-click or right-click to start a similar bin"
+    : "Drag to snap · Arrow keys to move · Double-click or right-click to start a similar bin";
   if (mode === "layout") fitGridPreview();
 }
 $("view-layout").addEventListener("click", () => void setView("layout"));

@@ -35,6 +35,8 @@ See the [installation guide](docs/guide.md#install) for project scope and custom
 
 Cells keep the standard **42 mm pitch** and **7 mm height units**. New designs
 start with an IKEA ALEX preset; measure your drawer before printing.
+To start a similar bin, double-click or right-click an existing bin in Layout
+or the 3D viewer, or choose **Use as new** in the inspector.
 You can also ask Copilot in chat to edit the canvas through its actions.
 
 ### Bin generator

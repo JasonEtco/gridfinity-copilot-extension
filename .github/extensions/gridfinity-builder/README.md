@@ -19,6 +19,10 @@ valid changes automatically. Uncheck it to set cell counts manually.
 Bin and layout inspector fields save valid edits automatically after a short
 typing pause. Invalid changes keep the saved geometry and show an error.
 Use Reset fields to discard invalid or conflicting edits.
+To start a new bin from an existing one, select **Use as new** in the
+inspector, or double-click or right-click the bin in the top view, bin list, or
+3D model viewer. This opens **New bin** with size, color, and construction
+settings copied. Photo recesses are not copied into the draft.
 
 The layout size and rulers use grid cells. Drawer dimensions accept cm or mm:
 20 cm by 20 cm becomes 4 by 4 cells plus 15.5 mm edge spacers at the default

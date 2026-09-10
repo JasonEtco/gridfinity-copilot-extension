@@ -101,8 +101,11 @@ Ask: **"Open Gridfinity Builder for design `tool-drawer`."** The canvas type is
   and top-view diagram show alignment and excess space.
   Draft export does not change the saved layout, even if the new grid would
   be too small for its current bins.
-- Move bins on the grid, or use position fields. Rotate, duplicate, and remove
-  bins with the inspector controls. Arrow keys move a focused bin one cell.
+- Move bins on the grid, or use position fields. Rotate, duplicate, remove, or
+  start a similar new-bin draft with the inspector controls. Arrow keys move a
+  focused bin one cell. Double-click or right-click a bin in the top view, bin
+  list, or 3D viewer to open **New bin** with its size, color, and construction
+  settings copied. Photo recesses are not copied into the draft.
 - Use the local 3D viewer to orbit and zoom around the layout or selected bin.
   It shows prototype geometry, not a validated printable mesh.
 - Add a photo inlay to a selected bin to make a recess shaped like an item.

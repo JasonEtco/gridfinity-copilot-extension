@@ -96,6 +96,28 @@ export function setupWorkflows({ getState, edit, findSpace, onCreated, onPhoto, 
         return bin;
     }
 
+    function binDraftLabel(label) {
+        const clean = (label || "bin").trim() || "bin";
+        return `New ${clean}`.slice(0, 80);
+    }
+
+    function useBinAsDraft(bin) {
+        validateBinOptions(bin);
+        $("new-bin-preset").value = "custom";
+        $("new-bin-label").value = binDraftLabel(bin.label);
+        for (const key of ["width", "depth", "height", "rotation", "color"]) {
+            $(`new-bin-${key}`).value = bin[key];
+        }
+        fillBinControls("new-bin", { options: structuredClone(bin.options || {}) });
+        $("new-bin-template-status").textContent = bin.inlay
+            ? `Started from ${bin.label || "the selected bin"}. Size and construction were copied; the photo recess was not copied.`
+            : `Started from ${bin.label || "the selected bin"}. Edit the draft, then create and place it.`;
+        show("bin");
+        updateBinPreview();
+        $("new-bin-label").focus();
+        $("new-bin-label").select();
+    }
+
     function updateBinPreview() {
         try {
             const bin = binDraft();
@@ -382,7 +404,7 @@ export function setupWorkflows({ getState, edit, findSpace, onCreated, onPhoto, 
     window.addEventListener("pagehide", () => { disposePreview("bin"); disposePreview("grid"); });
     update();
     return {
-        show, update, syncAvailability,
+        show, update, syncAvailability, useBinAsDraft,
         exportActiveDraft(format) {
             if (activeTab === "layout") return false;
             void exportDraft(activeTab, format);
