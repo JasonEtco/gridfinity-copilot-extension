@@ -8,7 +8,7 @@ const ZOOM_FACTOR = 1.18;
 const DEFAULT_VIEW_DIRECTION = new THREE.Vector3(1.18, -1.34, 1.06).normalize();
 const Z_AXIS = new THREE.Vector3(0, 0, 1);
 
-export function createViewer(container, { onError = () => {}, onSelect = () => {}, initialMode = "layout", lockMode = false, highlightExcess = true } = {}) {
+export function createViewer(container, { onError = () => {}, onSelect = () => {}, onOpenDraft = null, initialMode = "layout", lockMode = false, highlightExcess = true } = {}) {
     if (!["layout", "selected", "baseplate"].includes(initialMode)) throw new Error("Unknown 3D preview mode.");
     container.classList.add("model-viewer");
     let disposed = false;
@@ -27,7 +27,7 @@ export function createViewer(container, { onError = () => {}, onSelect = () => {
         <div class="gfv-viewer__chrome">
           <div>
             <p class="gf-v-label">3D preview · experimental geometry</p>
-            <p class="gfv-viewer__help">Drag to orbit, shift-drag to pan, wheel to zoom. Use this preview to inspect recesses and socket relief before export.</p>
+            <p class="gfv-viewer__help">Drag to orbit, shift-drag to pan, wheel to zoom. Double-click or right-click a bin to start a similar bin draft.</p>
           </div>
           <div class="gfv-viewer__selection" role="status" aria-live="polite">No bin selected</div>
         </div>
@@ -135,6 +135,12 @@ export function createViewer(container, { onError = () => {}, onSelect = () => {
         const moved = Math.hypot(event.clientX - pointerDown.x, event.clientY - pointerDown.y);
         pointerDown = null;
         if (moved <= 4) pickBin(event);
+    });
+    renderer.domElement.addEventListener("dblclick", (event) => {
+        if (openDraftFromPointer(event)) event.preventDefault();
+    });
+    renderer.domElement.addEventListener("contextmenu", (event) => {
+        if (openDraftFromPointer(event)) event.preventDefault();
     });
     renderer.domElement.addEventListener("keydown", (event) => {
         if (event.altKey || event.ctrlKey || event.metaKey) return;
@@ -361,7 +367,7 @@ export function createViewer(container, { onError = () => {}, onSelect = () => {
         offset.copy(candidate);
     }
 
-    function pickBin(event) {
+    function binIdAtPointer(event) {
         if (!sceneData || mode === "baseplate") return;
         const rect = renderer.domElement.getBoundingClientRect();
         const pointer = new THREE.Vector2(
@@ -373,7 +379,21 @@ export function createViewer(container, { onError = () => {}, onSelect = () => {
         const targets = sceneData.selectionTargets.filter(target => mode !== "selected" || target.userData.binId === selectedId);
         const hit = raycaster.intersectObjects(targets, false)
             .find((intersection) => intersection.object.userData.binId);
-        if (hit) onSelect(hit.object.userData.binId);
+        return hit?.object.userData.binId;
+    }
+
+    function pickBin(event) {
+        const binId = binIdAtPointer(event);
+        if (binId) onSelect(binId);
+    }
+
+    function openDraftFromPointer(event) {
+        if (!onOpenDraft) return false;
+        const binId = binIdAtPointer(event);
+        if (!binId) return false;
+        onSelect(binId);
+        onOpenDraft(binId);
+        return true;
     }
 
     function showOverlay(message) {

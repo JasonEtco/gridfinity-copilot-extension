@@ -64,7 +64,7 @@ export function renderHtml() {
         </div>
       </div>
       <div id="model-viewer" hidden></div>
-      <div class="layout-footer"><span id="layout-summary">Waiting for your design…</span><span class="keyboard-hint">Drag to snap · Arrow keys to move</span></div>
+      <div class="layout-footer"><span id="layout-summary">Waiting for your design…</span><span class="keyboard-hint">Drag to snap · Arrow keys to move · Double-click or right-click to start a similar bin</span></div>
       <div class="occupancy-track" aria-hidden="true"><span id="occupancy-fill"></span></div>
       <p id="empty-hint" class="empty-hint" hidden>Add a bin to start. Select a bin to fit an item from a photo.</p>
       <p class="prototype-note"><strong>Inspect and fit-test before printing.</strong> STL files are rendered with OpenSCAD, not copied from preview meshes. Bin construction follows its saved options; photo recesses have a constant depth. Bambu opens the file for review and does not start a print.</p>
@@ -101,7 +101,7 @@ export function renderHtml() {
           <p id="bin-dimensions" class="bin-dimensions"></p>
           <p class="field-help">X/Y start at 0. Width and depth are before rotation. Preview color is for organization only.</p>
           <div class="form-actions"><span class="field-help">Valid changes save automatically.</span><button id="reset-bin" type="button" class="text-button" data-needs-selection>Reset fields</button></div>
-          <div class="bin-actions"><button id="rotate-bin" type="button" data-needs-selection>↻ Rotate</button><button id="duplicate-bin" type="button" data-needs-selection>Duplicate</button><button id="remove-bin" type="button" class="danger-button" data-needs-selection>Remove</button></div>
+          <div class="bin-actions"><button id="rotate-bin" type="button" data-needs-selection>↻ Rotate</button><button id="duplicate-bin" type="button" data-needs-selection>Duplicate</button><button id="use-bin-template" type="button" data-needs-selection>Use as new</button><button id="remove-bin" type="button" class="danger-button" data-needs-selection>Remove</button></div>
           <div class="inlay-controls"><h3>Item recess</h3><p id="inlay-summary" class="field-help">This is an open bin.</p><button id="edit-inlay" type="button" data-needs-selection>Fit item from photo</button><button id="remove-inlay" type="button">Remove recess</button><p class="field-help">Trace a top-down photo to make a solid bin with an item-shaped recess.</p></div>
         </form>
       </section>
@@ -121,6 +121,7 @@ export function renderHtml() {
         <label for="new-bin-color">Color</label><select id="new-bin-color"><option value="blue">Workshop blue</option><option value="teal">Teal</option><option value="amber">Amber</option><option value="rose">Rose</option><option value="slate">Slate</option></select>
         ${renderBinControls("new-bin")}
         <div class="form-actions"><button id="create-bin-submit" class="primary" type="submit" data-requires-state>Create and place</button><button id="create-bin-photo" type="submit" data-photo="true" data-requires-state>Create and fit photo</button></div>
+        <p id="new-bin-template-status" class="field-help" role="status"></p>
         <p class="field-help">Existing bins are not moved. If this bin does not fit, resize the layout or create a larger grid first.</p>
       </form>
       <div class="creator-preview generator-preview">
